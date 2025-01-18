@@ -1,32 +1,32 @@
-import FormPagamentos, { FormPagamentosProps } from '@/components/FormProdutos';
+import FormLista, { ListaArray } from '@/components/FormLista';
 import { Icon } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, FlatList } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const DashboardScreen = () => {
 
   const [modalVisivel , setModalVisivel] = useState(false);
-  const [trasacoes, setTrasacoes] = useState<FormPagamentosProps[]>([]);
+  const [lista, setLista] = useState<ListaArray[]>([]);
 
   return (
-    <View style={styles.container}>
-      <Icon size={28} name='home' />
+    <SafeAreaView style={styles.container}>
+
       <Text style={styles.header}>Controle Financeiro</Text>
 
-      {/* Lista de transações */}
       <FlatList
-        data={trasacoes}
+        data={lista}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.transactionItem}>
             <Text style={styles.transactionText}>{item.descricao}</Text>
-            <Text style={styles.transactionText}>R$ {item.valor}</Text>
+            <Text style={styles.transactionText}>R$ {Number(item.valor).toFixed(2)}</Text>
           </View>
         )}
         ListEmptyComponent={<Text style={styles.emptyText}>Sem transações</Text>}
       />
 
-      {/* Botão para abrir o modal */}
+
       <TouchableOpacity
         style={styles.addButton}
         onPress={() => setModalVisivel(true)}
@@ -34,16 +34,15 @@ const DashboardScreen = () => {
         <Text style={styles.addButtonText}>+ Adicionar</Text>
       </TouchableOpacity>
 
-      {/* Modal com formulário */}
       <Modal
         visible={modalVisivel}
         transparent={true}
         animationType="slide"
         onRequestClose={() => setModalVisivel(false)}
       >
-       <FormPagamentos setTrasacoes={setTrasacoes} setModalVisivel={setModalVisivel}/>
+       <FormLista setLista={setLista} setModalVisivel={setModalVisivel}/>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 

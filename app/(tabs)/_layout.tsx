@@ -1,4 +1,4 @@
-import { Tabs } from 'expo-router';
+import { Stack, Tabs } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
 
@@ -7,7 +7,7 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { Icon} from 'lucide-react-native';
+import { CameraIcon, HistoryIcon, HomeIcon, Icon} from 'lucide-react-native';
 
 
 export default function TabLayout() {
@@ -32,16 +32,17 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Dashboard',
-          tabBarIcon: ({ color }) => <Icon size={28} name='home' color={color} />,
+          tabBarIcon: ({ color }) => <HomeIcon color={'black'} />,
         }}
       />
       <Tabs.Screen
         name="historico"
         options={{
           title: 'Histórico',
-          // tabBarIcon: ({ color }) => ,
+          tabBarIcon: ({ color }) => <HistoryIcon color={'black'} />,
         }}
       />
+      <Stack.Screen name="+not-found" />
     </Tabs>
   );
 }
