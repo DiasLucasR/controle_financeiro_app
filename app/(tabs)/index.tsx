@@ -1,14 +1,46 @@
-import FormLista, { ListaArray } from '@/components/FormLista';
+import { ListaObjeto } from '@/assets/types/types';
+import FormLista from '@/components/FormLista';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StatusBar } from 'expo-status-bar';
 import { Icon } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, Modal, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 const DashboardScreen = () => {
 
   const [modalVisivel , setModalVisivel] = useState(false);
-  const [lista, setLista] = useState<ListaArray[]>([]);
+  const [lista, setLista] = useState<ListaObjeto[]>([]);
 
+  const handleSalvarHistorico = async () => {
+    try {
+      if(lista.length){
+
+      let historicoString = await AsyncStorage.getItem('historico');
+
+      let historico = historicoString ? JSON.parse(historicoString) : [];
+
+      if(!Array.isArray(historico)){
+        historico = [];  
+      }
+      historico.push({id: Number(historico.length) + 1, descricao: "Lsita" +  historico.length,lista: lista});
+      await AsyncStorage.setItem('historico', JSON.stringify(historico));
+      setLista([])
+      }else{
+        Alert.alert(
+          "Atenção!",
+          "Não há items na sua lista atual.",
+          [
+            { text: "Ok", onPress: () => console.log("Confirmado") }
+          ]
+        );
+      }
+
+    } catch (error) {
+      console.error('Erro ao salvar o histórico:', error);
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
 
@@ -33,6 +65,13 @@ const DashboardScreen = () => {
       >
         <Text style={styles.addButtonText}>+ Adicionar</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => handleSalvarHistorico()}
+      >
+        <Text style={styles.addButtonText}>Salvar no Historico</Text>
+      </TouchableOpacity>
+
 
       <Modal
         visible={modalVisivel}
@@ -42,6 +81,7 @@ const DashboardScreen = () => {
       >
        <FormLista setLista={setLista} setModalVisivel={setModalVisivel}/>
       </Modal>
+     <StatusBar style="auto" />      
     </SafeAreaView>
   );
 };

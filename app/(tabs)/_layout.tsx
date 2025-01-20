@@ -8,6 +8,7 @@ import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { CameraIcon, HistoryIcon, HomeIcon, Icon} from 'lucide-react-native';
+import { StatusBar } from 'expo-status-bar';
 
 
 export default function TabLayout() {
@@ -43,6 +44,7 @@ export default function TabLayout() {
         }}
       />
       <Stack.Screen name="+not-found" />
+      <StatusBar style="auto" />      
     </Tabs>
   );
 }

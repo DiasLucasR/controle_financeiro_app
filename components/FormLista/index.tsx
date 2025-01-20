@@ -1,11 +1,6 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
-export interface ListaArray { id: string; descricao: string; valor: string }
-export interface FormPagamentosProps {
-  setLista: React.Dispatch<React.SetStateAction<ListaArray[]>>;
-  setModalVisivel: React.Dispatch<React.SetStateAction<boolean>>;
-}
 
 export default function FormLista({ setLista, setModalVisivel }: FormPagamentosProps) {
   const [transactions, setTransactions] = useState([]);

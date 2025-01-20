@@ -1,104 +1,93 @@
+import { HistoricoObjeto, ListaHistoricoProps } from '@/assets/types/types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, ActivityIndicator, SafeAreaView, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, FlatList, StyleSheet, ActivityIndicator, SafeAreaView, TouchableOpacity, Modal, ScrollView } from 'react-native';
 // import { API_URL } from '../api/config';
 
-const dadosHistorico = [
-  { id: "1", descricao: "Produto A", valor: "100.00" },
-  { id: "2", descricao: "Produto B", valor: "200.00" },
-  { id: "3", descricao: "Produto C", valor: "300.00" },
-  { id: "4", descricao: "Produto D", valor: "400.00" },
-  { id: "5", descricao: "Produto E", valor: "500.00" },
-];
-
-const listaHistorico = [
-  { id: "1", descricao: "Lista A", lista: dadosHistorico },
-  { id: "1", descricao: "Lista B", lista: dadosHistorico },
-]
 
 const HistoryScreen = () => {
-  const [listaSelecionada, setListaSelecionada] = useState<any[]>([]);
+  const [listaSelecionada, setListaSelecionada] = useState<HistoricoObjeto>({});
+  const [listaHistorico, setListaHistorico] = useState<HistoricoObjeto[]>([]);
+
   const [loading, setLoading] = useState(true);
-  const [modalVisivel , setModalVisivel] = useState(false);
-  
+  const [modalVisivel, setModalVisivel] = useState(false);
 
-  // const fetchTransactions = async () => {
-  //   try {
-  //     // Aqui você deve obter o user_id do estado global ou AsyncStorage
-  //     const user_id = 1; // Exemplo, substitua pelo ID real do usuário logado
-  //     // const response = await fetch(`${API_URL}/transactions/${user_id}`);
-  //     const data = await response.json();
+  const handleBuscarHistorico = async () => {
+    try {
+      let historicoString = await AsyncStorage.getItem('historico');
+      let historico = historicoString ?? '[]';
+      let historicoArray = JSON.parse(historico) as HistoricoObjeto[];
+      setListaHistorico(historicoArray)
+    } catch (erro) {
 
-  //     if (response.ok) {
-  //       setTransactions(data);
-  //     } else {
-  //       console.error('Erro ao buscar transações:', data.error);
-  //     }
-  //   } catch (error) {
-  //     console.error('Erro ao buscar transações:', error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  useEffect(() => {
-    console.log(listaSelecionada)
-  }, [listaSelecionada]);
+    }
+  }
 
   useEffect(() => {
     setTimeout(() => {
       setLoading(false)
     }, 1000)
-    // fetchTransactions();
+    handleBuscarHistorico()
   }, []);
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
+      <SafeAreaView style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#0000ff" />
-      </View>
+      </SafeAreaView>
     );
   }
 
 
 
-  const ListaHistorico = (listaHistorico : any[], setModalVisivel: React.Dispatch<React.SetStateAction<any[]>>) => {
+  const ListaHistoricoComponent: React.FC<ListaHistoricoProps> = ({ listaHistorico, setModalVisivel }) => {
 
     return (
-      <View>
+      <SafeAreaView style={styles.modalContainer}>
         <FlatList
-          data={listaHistorico.lista}
+          nestedScrollEnabled
+          data={listaSelecionada.lista}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <View style={styles.transactionItem}>
+            <View style={styles.transactionItem} >
               <Text style={styles.transactionText}>{item.descricao}</Text>
               <Text style={styles.transactionText}>R$ {item.valor}</Text>
             </View>
           )}
           ListEmptyComponent={<Text style={styles.emptyText}>Sem transações</Text>}
         />
-      </View>
+      </SafeAreaView>
     )
   }
-
+  console.log(listaHistorico)
   return (
-    <SafeAreaView style={styles.container}>
-
-      <Text style={styles.header}>Controle Financeiro</Text>
-
-      <FlatList
-        data={listaHistorico}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.transactionItem}>
-            <TouchableOpacity onPress={() => {setListaSelecionada(item)
-                                              setModalVisivel(true)
-                                            console.log("s")
-            }}>
-              <Text>{item.descricao}</Text></TouchableOpacity>
-          </View>
+  <SafeAreaView style={styles.container}>
+ 
+       <Text style={styles.header}>Controle Financeiro</Text>
+      <ScrollView>
+        {listaHistorico && listaHistorico.length > 0 ? (
+          listaHistorico.map((item) => (
+            <View key={item.id} style={styles.transactionItem}>
+              <TouchableOpacity
+                onPress={() => {
+                  setListaSelecionada(item);
+                  setModalVisivel(true);
+                }}
+              >
+                <Text>{item.descricao}</Text>
+              </TouchableOpacity>
+            </View>
+          ))
+        ) : (
+          <Text style={styles.emptyText}>Sem transações</Text>
         )}
-        ListEmptyComponent={<Text style={styles.emptyText}>Sem transações</Text>}
-      />
+      </ScrollView>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => handleBuscarHistorico()}
+      >
+        <Text style={styles.addButtonText}>Buscar Historico</Text>
+      </TouchableOpacity>
 
       <Modal
         visible={modalVisivel}
@@ -106,7 +95,7 @@ const HistoryScreen = () => {
         animationType="slide"
         onRequestClose={() => setModalVisivel(false)}
       >
-       <ListaHistorico listaHistorico={listaSelecionada} setModalVisivel={setModalVisivel}/>
+        <ListaHistoricoComponent listaHistorico={listaSelecionada} setModalVisivel={setModalVisivel} />
       </Modal>
 
     </SafeAreaView>
@@ -118,6 +107,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f4f4f4',
     padding: 20,
+    marginTop: 20
   },
   header: {
     fontSize: 24,
@@ -218,6 +208,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  
 });
 
 
