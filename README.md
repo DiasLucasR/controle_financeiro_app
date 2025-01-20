@@ -1,50 +1,39 @@
-# Welcome to your Expo app 👋
+##  App de Lista com Histórico 📋
+Este repositório contém o código-fonte de um aplicativo simples para gerenciar listas e visualizar históricos de listas anteriores. O app permite ao usuário adicionar novos itens a uma lista e acessar listas passadas, ideal para quem deseja organizar tarefas, compras ou qualquer tipo de lista.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+##  Funcionalidades 🚀 🚀
+- 📝 Listagem de Itens: Adicione e visualize itens em uma lista.
+- 🔁 Histórico de Listas: Acesse e visualize as listas anteriores armazenadas.
+- 🎨 Design Responsivo: Interface amigável e adaptável para diversos dispositivos.
 
-## Get started
 
-1. Install dependencies
+##  Tecnologias Utilizadas 🛠️
+- Expo para desenvolvimento e gerenciamento do projeto.
+- React Native para construção da interface.
+- React Hooks para gerenciar estado e lógica.
+- AsyncStorage para armazenamento local das listas passadas.
+- TypeScript (opcional) para tipagem estática.
 
-   ```bash
-   npm install
-   ```
 
-2. Start the app
-
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+## Como Rodar o Projeto 💻
+Clone o repositório:
 ```bash
-npm run reset-project
+git clone https://github.com/SeuUsuario/app_lista_generico.git
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Instale as dependências:
+```bash
+cd app_lista_generico
+yarn install
+```
 
-## Learn more
+Inicie o servidor de desenvolvimento:
+```bash
+yarn android
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+Escaneie o QR code com o aplicativo Expo Go ou execute no emulador.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Licença 📄
+Este projeto está sob a licença MIT, permitindo uso, modificação e distribuição com as devidas atribuições.
 
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
